@@ -1,6 +1,16 @@
 ---
+import axios from 'axios';
 
+// Replace with your Ghost API URL and key
+const API_URL = 'https://bogdanbogdan.ghost.io/ghost/api/v4/content/posts/';
+const API_KEY = 'c7c1dd33adbb6bfb3006d14eea';
+
+// Fetch posts
+const response = await axios.get(`${API_URL}?key=${API_KEY}`);
+const posts = response.data.posts;
+console.log('posts', posts[0])
 ---
+
 
 <html lang="en">
 	<head>
@@ -11,6 +21,17 @@
 		<title>Astro</title>
 	</head>
 	<body>
-		<h1>Astro</h1>
+		<h1>The blog section</h1>
+		<ul style="display: flex; gap: 2rem;">
+      {posts.map((post: any & {id: string}) => (
+        <li>
+
+					<img style="width: 200px;" src={post.feature_image} alt={post.title} />
+          <h2>{post.title}</h2>
+					<p>{new Date(post.created_at)} {post.reading_time} min read</p>
+          <a href={post.url}>Read more</a>
+        </li>
+      ))}
+    </ul>
 	</body>
 </html>
